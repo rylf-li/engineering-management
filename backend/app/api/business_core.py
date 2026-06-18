@@ -145,6 +145,28 @@ def _parse_pagination(
 
 
 # ===================================================================
+# 辅助函数 - 自动填充合同关联名称
+# ===================================================================
+def _fill_contract_names(db: Session, contract: Contract) -> None:
+    """根据 customer_id / department_id / company_id 自动填充名称字段"""
+    from app.models import Customer, Department, Company
+    if contract.customer_id and not contract.customer_name:
+        cust = db.query(Customer).filter(Customer.id == contract.customer_id).first()
+        if cust:
+            contract.customer_name = cust.name
+    if contract.department_id and not contract.department_name:
+        dept = db.query(Department).filter(Department.id == contract.department_id).first()
+        if dept:
+            contract.department_name = dept.name
+    if contract.company_id and not contract.company_name:
+        comp = db.query(Company).filter(Company.id == contract.company_id).first()
+        if comp:
+            contract.company_name = comp.name
+    db.commit()
+    db.refresh(contract)
+
+
+# ===================================================================
 # 路由定义 - 项目管理  /api/projects
 # ===================================================================
 router_projects = APIRouter(prefix="/api/projects", tags=["项目管理"])
@@ -435,8 +457,22 @@ def create_contract(
     db: Session = Depends(get_db),
     current_user: Dict[str, Any] = Depends(get_current_user),
 ):
-    """创建合同"""
-    contract = contract_crud.create(db, obj_in=data)
+    """创建合同（自动填充客户/部门/公司名称）"""
+    from app.models import Customer, Department, Company
+    # 验证外键引用存在，不存在的设为 None 防止 FK 约束失败
+    create_data = data.model_dump()
+    if create_data.get("customer_id"):
+        if not db.query(Customer).filter(Customer.id == create_data["customer_id"]).first():
+            create_data["customer_id"] = None
+    if create_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == create_data["department_id"]).first():
+            create_data["department_id"] = None
+    if create_data.get("company_id"):
+        if not db.query(Company).filter(Company.id == create_data["company_id"]).first():
+            create_data["company_id"] = None
+    contract = contract_crud.create_with_dict(db, obj_data=create_data)
+    # 自动填充关联名称
+    _fill_contract_names(db, contract)
     _recalc_contract_finance(db, contract)
     sync_all(db)
     return contract
@@ -449,8 +485,21 @@ def update_contract(
     db: Session = Depends(get_db),
     current_user: Dict[str, Any] = Depends(get_current_user),
 ):
-    """更新合同（触发财务字段重算）"""
-    contract = contract_crud.update(db, id=contract_id, obj_in=data)
+    """更新合同（自动填充名称，触发财务字段重算）"""
+    from app.models import Customer, Department, Company
+    # 验证外键引用存在，不存在的设为 None
+    update_data = data.model_dump(exclude_unset=True)
+    if update_data.get("customer_id"):
+        if not db.query(Customer).filter(Customer.id == update_data["customer_id"]).first():
+            update_data["customer_id"] = None
+    if update_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == update_data["department_id"]).first():
+            update_data["department_id"] = None
+    if update_data.get("company_id"):
+        if not db.query(Company).filter(Company.id == update_data["company_id"]).first():
+            update_data["company_id"] = None
+    contract = contract_crud.update_with_dict(db, id=contract_id, obj_data=update_data)
+    _fill_contract_names(db, contract)
     _recalc_contract_finance(db, contract)
     sync_all(db)
     return contract
@@ -758,11 +807,26 @@ def create_project_contract(
     db: Session = Depends(get_db),
     current_user: Dict[str, Any] = Depends(get_current_user),
 ):
-    """在项目下创建合同"""
+    """在项目下创建合同（自动关联项目ID，自动填充名称）"""
+    from app.models import Customer, Department, Company
     project = project_crud.get(db, id=project_id)
     if not project:
         raise HTTPException(status_code=404, detail="项目不存在")
-    contract = contract_crud.create(db, obj_in=data)
+    # 强制设置 project_id 关联到项目
+    create_data = data.model_dump()
+    create_data["project_id"] = project_id
+    # 验证外键引用存在
+    if create_data.get("customer_id"):
+        if not db.query(Customer).filter(Customer.id == create_data["customer_id"]).first():
+            create_data["customer_id"] = None
+    if create_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == create_data["department_id"]).first():
+            create_data["department_id"] = None
+    if create_data.get("company_id"):
+        if not db.query(Company).filter(Company.id == create_data["company_id"]).first():
+            create_data["company_id"] = None
+    contract = contract_crud.create_with_dict(db, obj_data=create_data)
+    _fill_contract_names(db, contract)
     _recalc_contract_finance(db, contract)
     return contract
 
@@ -802,10 +866,25 @@ def create_project_order(
     current_user: Dict[str, Any] = Depends(get_current_user),
 ):
     """在项目下创建新订单（自动关联合同）"""
+    from app.models import Customer, Department, Company
     project = project_crud.get(db, id=project_id)
     if not project:
         raise HTTPException(status_code=404, detail="项目不存在")
-    order = Order(**data.dict())
+    create_data = data.model_dump()
+    # 验证外键引用存在
+    if create_data.get("customer_id"):
+        if not db.query(Customer).filter(Customer.id == create_data["customer_id"]).first():
+            create_data["customer_id"] = None
+    if create_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == create_data["department_id"]).first():
+            create_data["department_id"] = None
+    if create_data.get("company_id"):
+        if not db.query(Company).filter(Company.id == create_data["company_id"]).first():
+            create_data["company_id"] = None
+    if create_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == create_data["contract_id"]).first():
+            create_data["contract_id"] = None
+    order = Order(**create_data)
     db.add(order)
     db.commit()
     db.refresh(order)

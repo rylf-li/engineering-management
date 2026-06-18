@@ -242,7 +242,12 @@ def create_employee(
     _current_user=Depends(get_current_user),
 ):
     import hashlib
+    from app.models import Department
     obj_data = data.model_dump()
+    # 验证外键引用存在
+    if obj_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == obj_data["department_id"]).first():
+            obj_data["department_id"] = None
     password = obj_data.pop("password", "147258")
     obj_data["password_hash"] = hashlib.md5(("pwd_" + password).encode()).hexdigest()
     result = _employee_crud.create_with_dict(db, obj_data=obj_data)
@@ -257,7 +262,13 @@ def update_employee(
     db: Session = Depends(get_db),
     _current_user=Depends(get_current_user),
 ):
-    result = _employee_crud.update(db, id=item_id, obj_in=data)
+    from app.models import Department
+    update_data = data.model_dump(exclude_unset=True)
+    # 验证外键引用存在
+    if update_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == update_data["department_id"]).first():
+            update_data["department_id"] = None
+    result = _employee_crud.update_with_dict(db, id=item_id, obj_data=update_data)
     sync_all(db)
     return result
 

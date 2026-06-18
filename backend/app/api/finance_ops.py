@@ -219,7 +219,22 @@ async def create_order(
     _current_user=Depends(get_current_user),
 ):
     """创建订单，自动更新合同的财务汇总字段"""
-    order = order_crud.create(db, obj_in=obj_in)
+    from app.models import Customer, Department, Company
+    create_data = obj_in.model_dump()
+    # 验证外键引用存在
+    if create_data.get("customer_id"):
+        if not db.query(Customer).filter(Customer.id == create_data["customer_id"]).first():
+            create_data["customer_id"] = None
+    if create_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == create_data["department_id"]).first():
+            create_data["department_id"] = None
+    if create_data.get("company_id"):
+        if not db.query(Company).filter(Company.id == create_data["company_id"]).first():
+            create_data["company_id"] = None
+    if create_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == create_data["contract_id"]).first():
+            create_data["contract_id"] = None
+    order = order_crud.create_with_dict(db, obj_data=create_data)
     # 自动更新合同的财务汇总
     if order.contract_id:
         _recalc_contract_financials(db, order.contract_id)
@@ -248,7 +263,22 @@ async def update_order(
     _current_user=Depends(get_current_user),
 ):
     """更新订单，自动更新合同的财务汇总字段"""
-    order = order_crud.update(db, id=order_id, obj_in=obj_in)
+    from app.models import Customer, Department, Company
+    update_data = obj_in.model_dump(exclude_unset=True)
+    # 验证外键引用存在
+    if update_data.get("customer_id"):
+        if not db.query(Customer).filter(Customer.id == update_data["customer_id"]).first():
+            update_data["customer_id"] = None
+    if update_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == update_data["department_id"]).first():
+            update_data["department_id"] = None
+    if update_data.get("company_id"):
+        if not db.query(Company).filter(Company.id == update_data["company_id"]).first():
+            update_data["company_id"] = None
+    if update_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == update_data["contract_id"]).first():
+            update_data["contract_id"] = None
+    order = order_crud.update_with_dict(db, id=order_id, obj_data=update_data)
     if order.contract_id:
         _recalc_contract_financials(db, order.contract_id)
     sync_all(db)
@@ -857,7 +887,19 @@ async def create_finance(
     _current_user=Depends(get_current_user),
 ):
     """创建财务记录"""
-    finance = finance_crud.create(db, obj_in=obj_in)
+    from app.models import Department, Company
+    create_data = obj_in.model_dump()
+    # 验证外键引用存在
+    if create_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == create_data["contract_id"]).first():
+            create_data["contract_id"] = None
+    if create_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == create_data["department_id"]).first():
+            create_data["department_id"] = None
+    if create_data.get("company_id"):
+        if not db.query(Company).filter(Company.id == create_data["company_id"]).first():
+            create_data["company_id"] = None
+    finance = finance_crud.create_with_dict(db, obj_data=create_data)
     sync_all(db)
     return _orm_to_dict(finance)
 
@@ -883,7 +925,19 @@ async def update_finance(
     _current_user=Depends(get_current_user),
 ):
     """更新财务记录"""
-    finance = finance_crud.update(db, id=finance_id, obj_in=obj_in)
+    from app.models import Department, Company
+    update_data = obj_in.model_dump(exclude_unset=True)
+    # 验证外键引用存在
+    if update_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == update_data["contract_id"]).first():
+            update_data["contract_id"] = None
+    if update_data.get("department_id"):
+        if not db.query(Department).filter(Department.id == update_data["department_id"]).first():
+            update_data["department_id"] = None
+    if update_data.get("company_id"):
+        if not db.query(Company).filter(Company.id == update_data["company_id"]).first():
+            update_data["company_id"] = None
+    finance = finance_crud.update_with_dict(db, id=finance_id, obj_data=update_data)
     sync_all(db)
     return _orm_to_dict(finance)
 

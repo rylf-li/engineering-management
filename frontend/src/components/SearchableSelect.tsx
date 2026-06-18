@@ -51,7 +51,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
     if (initialized.current) return;
     initialized.current = true;
     setLoading(true);
-    api.get(endpoint, { params: { page_size: 100 } })
+    api.get(endpoint, { params: { all: true, page_size: 99999 } })
       .then((res: any) => {
         setOptions(res.items ?? []);
       })

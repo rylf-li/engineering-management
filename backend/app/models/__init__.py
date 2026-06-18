@@ -330,6 +330,7 @@ class Contract(Base, TimestampMixin, SortableMixin):
     unrequested_amount = Column(Numeric(12, 2), default=0, comment="未请款金额")
 
     # 成本与费用
+    contract_amount = Column(Numeric(12, 2), default=0, comment="合同金额")
     labor_cost = Column(Numeric(12, 2), default=0, comment="劳务费")
     cost_amount = Column(Numeric(12, 2), default=0, comment="成本金额")
     tax_fee = Column(Numeric(12, 2), default=0, comment="税费")

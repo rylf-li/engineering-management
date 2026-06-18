@@ -49,6 +49,10 @@ const contractColumns: any[] = [
   },
   { title: '名称', dataIndex: 'name', key: 'name' },
   {
+    title: '合同金额', dataIndex: 'contract_amount', key: 'contract_amount',
+    render: (v: number) => fmtYuan(v),
+  },
+  {
     title: '状态', dataIndex: 'status', key: 'status',
     render: (v: string) => <Tag color={statusColors[v]}>{v}</Tag>,
   },
@@ -161,6 +165,9 @@ const ProjectList: React.FC = () => {
       </Form.Item>
       <Form.Item name="name" label="名称" rules={[{ required: true, message: '请输入名称' }]}>
         <Input placeholder="请输入名称" />
+      </Form.Item>
+      <Form.Item name="contract_amount" label="合同金额(¥)">
+        <InputNumber style={{ width: '100%' }} prefix="¥" placeholder="请输入合同金额" />
       </Form.Item>
       <Form.Item name="status" label="状态">
         <Select placeholder="请选择状态">

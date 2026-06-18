@@ -116,6 +116,20 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
+    def update_with_dict(self, db: Session, *, id: int, obj_data: dict) -> ModelType:
+        """使用预处理的字典更新记录（跳过 schema 字段映射）"""
+        db_obj = self.get(db, id=id)
+        if not db_obj:
+            raise HTTPException(status_code=404, detail=f"记录不存在 (id={id})")
+        for field, value in obj_data.items():
+            if value is not None and hasattr(db_obj, field):
+                if value == 0 and field.endswith("_id"):
+                    value = None
+                setattr(db_obj, field, value)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
     def delete(self, db: Session, *, id: int) -> ModelType:
         db_obj = self.get(db, id=id)
         if not db_obj:

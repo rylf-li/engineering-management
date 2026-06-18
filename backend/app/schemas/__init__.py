@@ -269,6 +269,7 @@ class ContractBase(BaseModel):
     bonus: Optional[Decimal] = Decimal(0)
     owner_name: Optional[str] = None
     sales_name: Optional[str] = None
+    contract_amount: Optional[Decimal] = Decimal(0)
 
 
 class ContractCreate(ContractBase):
@@ -284,6 +285,7 @@ class ContractOut(ContractBase):
     id: int
     orders_unfinished: int = 0
     orders_finished: int = 0
+    contract_amount: Decimal = Decimal(0)
     receivable_amount: Decimal = Decimal(0)
     request_amount: Decimal = Decimal(0)
     collection_amount: Decimal = Decimal(0)
