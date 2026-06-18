@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Select, Spin } from 'antd';
+import { Select, Input, Button, Divider, Spin } from 'antd';
+import { EditOutlined, SearchOutlined } from '@ant-design/icons';
 import api from '../utils/api';
 
 interface SearchableSelectProps {
@@ -11,7 +12,7 @@ interface SearchableSelectProps {
   labelKey?: string;
   /** 值字段名（默认 'id'） */
   valueKey?: string;
-  /** 额外显示字段，如 'project_no'，显示为 "name (project_no)" */
+  /** 额外显示字段，如 'contract_no'，显示为 "name (contract_no)" */
   extraLabelKey?: string;
   /** 搜索字段（默认 labelKey） */
   searchField?: string;
@@ -23,8 +24,6 @@ interface SearchableSelectProps {
   onChange?: (value: any) => void;
   /** 模式：'default' | 'multiple' */
   mode?: 'default' | 'multiple';
-  /** 自定义筛选函数（默认 filterOption） */
-  filterOption?: ((input: string, option: any) => boolean) | boolean;
 }
 
 const SearchableSelect: React.FC<SearchableSelectProps> = ({
@@ -38,15 +37,19 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
   value,
   onChange,
   mode,
-  filterOption,
 }) => {
   const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [isManual, setIsManual] = useState(false);
+  const [manualText, setManualText] = useState('');
   const timerRef = useRef<any>(null);
+  const initialized = useRef(false);
 
   // 初始加载前 100 条
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
     setLoading(true);
     api.get(endpoint, { params: { page_size: 100 } })
       .then((res: any) => {
@@ -62,7 +65,6 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       if (!val) {
-        // 清空搜索时恢复初始 100 条
         setLoading(true);
         api.get(endpoint, { params: { page_size: 100 } })
           .then((res: any) => setOptions(res.items ?? []))
@@ -86,20 +88,88 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
     return extra ? `${label} (${extra})` : label;
   };
 
+  // 切换到手动输入模式
+  const switchToManual = () => {
+    setIsManual(true);
+    setManualText(typeof value === 'string' ? value : '');
+  };
+
+  // 手动输入变化
+  const handleManualChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setManualText(e.target.value);
+    onChange?.(e.target.value);
+  };
+
+  // 如果 value 是字符串且不在选项列表中，自动切换到手动模式
+  useEffect(() => {
+    if (value && typeof value === 'string' && options.length > 0) {
+      const found = options.some(o => String(o[valueKey]) === String(value));
+      if (!found) {
+        setIsManual(true);
+        setManualText(value);
+      }
+    }
+  }, [value, options, valueKey]);
+
+  // 手动输入模式
+  if (isManual) {
+    return (
+      <Input
+        value={manualText}
+        onChange={handleManualChange}
+        placeholder={placeholder}
+        suffix={
+          <Button
+            type="link"
+            size="small"
+            icon={<SearchOutlined />}
+            onClick={() => setIsManual(false)}
+            style={{ fontSize: 12 }}
+          >
+            选择
+          </Button>
+        }
+      />
+    );
+  }
+
   return (
     <Select
       showSearch
       allowClear={allowClear}
       placeholder={placeholder}
       value={value}
-      onChange={onChange}
+      onChange={(v, option) => {
+        // 如果选中的是手动输入项，切换到输入模式
+        if (v === '__MANUAL_INPUT__') {
+          switchToManual();
+          return;
+        }
+        onChange?.(v);
+      }}
       mode={mode}
       loading={loading}
       notFoundContent={loading ? <Spin size="small" /> : '暂无数据'}
       onSearch={handleSearch}
       searchValue={searchText}
-      filterOption={filterOption ?? false}
+      filterOption={false}
       style={{ width: '100%' }}
+      dropdownRender={(menu) => (
+        <>
+          {menu}
+          <Divider style={{ margin: '4px 0' }} />
+          <div style={{ padding: '4px 8px' }}>
+            <Button
+              type="link"
+              icon={<EditOutlined />}
+              onClick={switchToManual}
+              size="small"
+            >
+              手动输入自定义值
+            </Button>
+          </div>
+        </>
+      )}
     >
       {options.map((item: any) => (
         <Select.Option key={item[valueKey]} value={item[valueKey]}>
