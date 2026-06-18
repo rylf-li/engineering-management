@@ -14,8 +14,6 @@ interface SearchableSelectProps {
   valueKey?: string;
   /** 额外显示字段，如 'contract_no'，显示为 "name (contract_no)" */
   extraLabelKey?: string;
-  /** 搜索字段（默认 labelKey） */
-  searchField?: string;
   /** 是否允许清除 */
   allowClear?: boolean;
   /** 是否允许手动输入（默认 true，false 时只允许从列表选择） */
@@ -34,7 +32,6 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
   labelKey = 'name',
   valueKey = 'id',
   extraLabelKey,
-  searchField,
   allowClear = true,
   allowManual = true,
   value,
@@ -76,8 +73,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
         return;
       }
       setLoading(true);
-      const params: any = { all: true };
-      params[searchField || labelKey] = val;
+      const params: any = { all: true, search: val };
       api.get(endpoint, { params })
         .then((res: any) => setOptions(res.items ?? []))
         .catch(() => {})

@@ -235,10 +235,10 @@ const ProjectList: React.FC = () => {
         <SearchableSelect endpoint="/employees/" placeholder="请选择负责人" labelKey="name" valueKey="name" allowClear />
       </Form.Item>
       <Form.Item name="department_id" label="部门">
-        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear />
+        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="company_id" label="公司">
-        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear />
+        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear allowManual={false} />
       </Form.Item>
     </>
   );

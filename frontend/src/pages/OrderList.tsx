@@ -248,7 +248,7 @@ const OrderList: React.FC = () => {
                 <DatePicker style={{ width: '100%' }} />
               </Form.Item>
               <Form.Item name="contract_id" label="合同" rules={[{ required: true, message: '请选择合同' }]}>
-                <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" />
+                <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" allowManual={false} />
               </Form.Item>
             </>
           ) : (
