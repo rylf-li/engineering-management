@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag, Input, InputNumber, Select, Form } from 'antd';
 import CrudTable, { MiniCrudTable, renderDetail, FilterConfig } from '../components/CrudTable';
-import api from '../utils/api';
+import SearchableSelect from '../components/SearchableSelect';
 
 /** 金额格式化 */
 const fmtYuan = (v: number | string | null | undefined) => `¥${(Number(v) || 0).toFixed(2)}`;
@@ -19,24 +19,6 @@ const roleColors: Record<string, string> = {
   '业务员': 'blue',
   '财务': 'purple',
   '员工': 'green',
-};
-
-/** 部门下拉选择组件（从 API 加载） */
-const DepartmentSelect: React.FC = () => {
-  const [depts, setDepts] = React.useState<any[]>([]);
-  React.useEffect(() => {
-    api.get('/departments/?all=true').then((res: any) => {
-      const items = res?.items ?? res?.data?.items ?? [];
-      setDepts(items);
-    }).catch(() => {});
-  }, []);
-  return (
-    <Select placeholder="请选择部门（可选）" allowClear style={{ width: '100%' }}>
-      {depts.map((d: any) => (
-        <Select.Option key={d.id} value={d.id}>{d.name}</Select.Option>
-      ))}
-    </Select>
-  );
 };
 
 // ─── 主表列 ──────────────────────────────────────────────────────────────────
@@ -138,7 +120,7 @@ const formFields = (
       </Select>
     </Form.Item>
     <Form.Item name="department_id" label="所属部门">
-      <DepartmentSelect />
+      <SearchableSelect endpoint="/departments/" placeholder="请选择部门（可选）" allowClear />
     </Form.Item>
   </>
 );

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Form, Input, Select, DatePicker, InputNumber, Tag, Tabs, message } from 'antd';
 import { DollarOutlined, BankOutlined } from '@ant-design/icons';
 import CrudTable, { MiniCrudTable, renderDetail, FilterConfig } from '../components/CrudTable';
+import SearchableSelect from '../components/SearchableSelect';
 import api from '../utils/api';
 
 const colors: Record<string, string> = {
@@ -87,21 +88,6 @@ const OrderList: React.FC = () => {
   const [batchModal, setBatchModal] = useState<{ visible: boolean; type: 'request' | 'collect'; selectedRowKeys: React.Key[]; selectedRows: any[] }>({ visible: false, type: 'request', selectedRowKeys: [], selectedRows: [] });
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [customers, setCustomers] = useState<any[]>([]);
-  const [contracts, setContracts] = useState<any[]>([]);
-  const [departments, setDepartments] = useState<any[]>([]);
-  const [companies, setCompanies] = useState<any[]>([]);
-  const [employees, setEmployees] = useState<any[]>([]);
-
-  useEffect(() => {
-    Promise.all([
-      api.get('/customers/', { params: { all: true } }).then(r => setCustomers(r.items ?? [])).catch(() => {}),
-      api.get('/contracts/', { params: { all: true } }).then(r => setContracts(r.items ?? [])).catch(() => {}),
-      api.get('/departments/', { params: { all: true } }).then(r => setDepartments(r.items ?? [])).catch(() => {}),
-      api.get('/companies/', { params: { all: true } }).then(r => setCompanies(r.items ?? [])).catch(() => {}),
-      api.get('/employees/', { params: { all: true } }).then(r => setEmployees(r.items ?? [])).catch(() => {}),
-    ]);
-  }, []);
 
   const handleBatchOk = async () => {
     try {
@@ -166,14 +152,10 @@ const OrderList: React.FC = () => {
         <DatePicker style={{ width: '100%' }} />
       </Form.Item>
       <Form.Item name="contract_id" label="合同">
-        <Select placeholder="请选择合同" showSearch filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {contracts.map(c => <Select.Option key={c.id} value={c.id}>{c.contract_no} - {c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" />
       </Form.Item>
       <Form.Item name="customer_id" label="客户">
-        <Select placeholder="请选择客户" showSearch filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {customers.map(c => <Select.Option key={c.id} value={c.id}>{c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" />
       </Form.Item>
       <Form.Item name="biz_category" label="业务类别">
         <Select placeholder="请选择业务类别">
@@ -216,24 +198,16 @@ const OrderList: React.FC = () => {
         <InputNumber style={{ width: '100%' }} prefix="¥" />
       </Form.Item>
       <Form.Item name="company_id" label="公司">
-        <Select placeholder="请选择公司" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {companies.map(c => <Select.Option key={c.id} value={c.id}>{c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear />
       </Form.Item>
       <Form.Item name="owner_name" label="负责人">
-        <Select placeholder="请选择负责人" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {employees.map(e => <Select.Option key={e.id} value={e.name}>{e.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/employees/" placeholder="请选择负责人" labelKey="name" valueKey="name" allowClear />
       </Form.Item>
       <Form.Item name="sales_name" label="业务员">
-        <Select placeholder="请选择业务员" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {employees.map(e => <Select.Option key={e.id} value={e.name}>{e.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/employees/" placeholder="请选择业务员" labelKey="name" valueKey="name" allowClear />
       </Form.Item>
       <Form.Item name="department_id" label="部门">
-        <Select placeholder="请选择部门" showSearch allowClear>
-          {departments.map(d => <Select.Option key={d.id} value={d.id}>{d.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear />
       </Form.Item>
     </>
   );
@@ -274,9 +248,7 @@ const OrderList: React.FC = () => {
                 <DatePicker style={{ width: '100%' }} />
               </Form.Item>
               <Form.Item name="contract_id" label="合同" rules={[{ required: true, message: '请选择合同' }]}>
-                <Select placeholder="请选择合同" showSearch filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-                  {contracts.map(c => <Select.Option key={c.id} value={c.id}>{c.contract_no} - {c.name}</Select.Option>)}
-                </Select>
+                <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" />
               </Form.Item>
             </>
           ) : (
@@ -288,9 +260,7 @@ const OrderList: React.FC = () => {
                 <DatePicker style={{ width: '100%' }} />
               </Form.Item>
               <Form.Item name="contract_id" label="合同" rules={[{ required: true, message: '请选择合同' }]}>
-                <Select placeholder="请选择合同" showSearch filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-                  {contracts.map(c => <Select.Option key={c.id} value={c.id}>{c.contract_no} - {c.name}</Select.Option>)}
-                </Select>
+                <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" />
               </Form.Item>
               <Form.Item name="collection_amount" label="收款金额(¥)" rules={[{ required: true, message: '请输入收款金额' }]}>
                 <InputNumber style={{ width: '100%' }} prefix="¥" />

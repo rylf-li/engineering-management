@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Row, Col, Statistic, Tag, Form, Input, Select, DatePicker, InputNumber, Tabs } from 'antd';
 import { DollarOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import CrudTable, { MiniCrudTable, renderDetail, FilterConfig } from '../components/CrudTable';
+import SearchableSelect from '../components/SearchableSelect';
 import api from '../utils/api';
 
 const colors: Record<string, string> = {
@@ -75,9 +76,6 @@ const filterConfigs: FilterConfig[] = [
 const FinanceList: React.FC = () => {
   const [summary, setSummary] = useState({ income: 0, expense: 0 });
   const [refreshKey, setRefreshKey] = useState(0);
-  const [contracts, setContracts] = useState<any[]>([]);
-  const [departments, setDepartments] = useState<any[]>([]);
-  const [companies, setCompanies] = useState<any[]>([]);
 
   const fetchSummary = useCallback(async () => {
     try {
@@ -90,14 +88,6 @@ const FinanceList: React.FC = () => {
   }, []);
 
   useEffect(() => { fetchSummary(); }, [fetchSummary, refreshKey]);
-
-  useEffect(() => {
-    Promise.all([
-      api.get('/contracts/', { params: { all: true } }).then(r => setContracts(r.items ?? [])).catch(() => {}),
-      api.get('/departments/', { params: { all: true } }).then(r => setDepartments(r.items ?? [])).catch(() => {}),
-      api.get('/companies/', { params: { all: true } }).then(r => setCompanies(r.items ?? [])).catch(() => {}),
-    ]);
-  }, []);
 
   // ─── 扩展行渲染（子表） ──────────────────────────────────────────────────
   const expandedRowRender = (record: any) => {
@@ -129,9 +119,7 @@ const FinanceList: React.FC = () => {
         <DatePicker style={{ width: '100%' }} />
       </Form.Item>
       <Form.Item name="contract_id" label="合同">
-        <Select placeholder="请选择合同" allowClear showSearch filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {contracts.map(c => <Select.Option key={c.id} value={c.id}>{c.contract_no} - {c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" allowClear />
       </Form.Item>
       <Form.Item name="category" label="款项类别">
         <Select placeholder="请选择款项类别">
@@ -157,9 +145,7 @@ const FinanceList: React.FC = () => {
         <InputNumber style={{ width: '100%' }} prefix="¥" />
       </Form.Item>
       <Form.Item name="company_id" label="公司">
-        <Select placeholder="请选择公司">
-          {companies.map(c => <Select.Option key={c.id} value={c.id}>{c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear />
       </Form.Item>
       <Form.Item name="company_bank_account" label="银行账号">
         <Input placeholder="请输入银行账号" />

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Tag, Tabs, Select, DatePicker, Input, Form, InputNumber } from 'antd';
 import CrudTable, { MiniCrudTable, renderDetail, FilterConfig } from '../components/CrudTable';
-import api from '../utils/api';
+import SearchableSelect from '../components/SearchableSelect';
 
 /** 日期格式化 */
 const fmtDate = (v: string | null | undefined) =>
@@ -149,21 +149,6 @@ const formFields = (
 
 // ─── 主页面 ──────────────────────────────────────────────────────────────────
 const ProjectList: React.FC = () => {
-  const [customers, setCustomers] = useState<any[]>([]);
-  const [contracts, setContracts] = useState<any[]>([]);
-  const [departments, setDepartments] = useState<any[]>([]);
-  const [companies, setCompanies] = useState<any[]>([]);
-  const [employees, setEmployees] = useState<any[]>([]);
-
-  useEffect(() => {
-    Promise.all([
-      api.get('/customers/', { params: { all: true } }).then(r => setCustomers(r.items ?? [])).catch(() => {}),
-      api.get('/contracts/', { params: { all: true } }).then(r => setContracts(r.items ?? [])).catch(() => {}),
-      api.get('/departments/', { params: { all: true } }).then(r => setDepartments(r.items ?? [])).catch(() => {}),
-      api.get('/companies/', { params: { all: true } }).then(r => setCompanies(r.items ?? [])).catch(() => {}),
-      api.get('/employees/', { params: { all: true } }).then(r => setEmployees(r.items ?? [])).catch(() => {}),
-    ]);
-  }, []);
 
   // ─── 子表表单字段 ──────────────────────────────────────────────────────────
   const contractFormFields = (
@@ -186,29 +171,19 @@ const ProjectList: React.FC = () => {
         </Select>
       </Form.Item>
       <Form.Item name="customer_id" label="客户">
-        <Select placeholder="请选择客户" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {customers.map(c => <Select.Option key={c.id} value={c.id}>{c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" allowClear />
       </Form.Item>
       <Form.Item name="department_id" label="部门">
-        <Select placeholder="请选择部门" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {departments.map(d => <Select.Option key={d.id} value={d.id}>{d.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear />
       </Form.Item>
       <Form.Item name="company_id" label="公司">
-        <Select placeholder="请选择公司" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {companies.map(c => <Select.Option key={c.id} value={c.id}>{c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear />
       </Form.Item>
       <Form.Item name="owner_name" label="负责人">
-        <Select placeholder="请选择负责人" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {employees.map(e => <Select.Option key={e.id} value={e.name}>{e.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/employees/" placeholder="请选择负责人" labelKey="name" valueKey="name" allowClear />
       </Form.Item>
       <Form.Item name="sales_name" label="销售人员">
-        <Select placeholder="请选择销售人员" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {employees.map(e => <Select.Option key={e.id} value={e.name}>{e.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/employees/" placeholder="请选择销售人员" labelKey="name" valueKey="name" allowClear />
       </Form.Item>
       <Form.Item name="receivable_amount" label="应收金额(¥)">
         <InputNumber style={{ width: '100%' }} prefix="¥" placeholder="请输入应收金额" />
@@ -232,14 +207,10 @@ const ProjectList: React.FC = () => {
         </Select>
       </Form.Item>
       <Form.Item name="contract_id" label="合同">
-        <Select placeholder="请选择合同" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {contracts.map(c => <Select.Option key={c.id} value={c.id}>{c.contract_no} - {c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" allowClear />
       </Form.Item>
       <Form.Item name="customer_id" label="客户">
-        <Select placeholder="请选择客户" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {customers.map(c => <Select.Option key={c.id} value={c.id}>{c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" allowClear />
       </Form.Item>
       <Form.Item name="biz_category" label="业务类别">
         <Select placeholder="请选择业务类别">
@@ -261,19 +232,13 @@ const ProjectList: React.FC = () => {
         <InputNumber style={{ width: '100%' }} prefix="¥" />
       </Form.Item>
       <Form.Item name="owner_name" label="负责人">
-        <Select placeholder="请选择负责人" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {employees.map(e => <Select.Option key={e.id} value={e.name}>{e.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/employees/" placeholder="请选择负责人" labelKey="name" valueKey="name" allowClear />
       </Form.Item>
       <Form.Item name="department_id" label="部门">
-        <Select placeholder="请选择部门" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {departments.map(d => <Select.Option key={d.id} value={d.id}>{d.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear />
       </Form.Item>
       <Form.Item name="company_id" label="公司">
-        <Select placeholder="请选择公司" showSearch allowClear filterOption={(input, option) => (option?.children as any)?.toString().includes(input)}>
-          {companies.map(c => <Select.Option key={c.id} value={c.id}>{c.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear />
       </Form.Item>
     </>
   );
