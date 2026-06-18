@@ -414,10 +414,11 @@ export const MiniCrudTable: React.FC<MiniCrudTableProps> = ({
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      // Convert dayjs objects to date strings for API
+      // Convert dayjs objects to date strings for API, strip empty/undefined values
       const apiValues: any = {};
       Object.entries(values).forEach(([key, val]) => {
-        if (val && typeof val === 'object' && val._isAMomentObject === undefined && dayjs.isDayjs(val)) {
+        if (val === '' || val === undefined || val === null) return; // skip empty values to avoid Pydantic int parsing errors
+        if (typeof val === 'object' && val._isAMomentObject === undefined && dayjs.isDayjs(val)) {
           apiValues[key] = val.format('YYYY-MM-DD');
         } else {
           apiValues[key] = val;
@@ -800,10 +801,11 @@ const CrudTable: React.FC<CrudTableProps> = ({
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      // Convert dayjs objects to date strings for API
+      // Convert dayjs objects to date strings for API, strip empty/undefined values
       const apiValues: any = {};
       Object.entries(values).forEach(([key, val]) => {
-        if (val && typeof val === 'object' && val._isAMomentObject === undefined && dayjs.isDayjs(val)) {
+        if (val === '' || val === undefined || val === null) return; // skip empty values to avoid Pydantic int parsing errors
+        if (typeof val === 'object' && val._isAMomentObject === undefined && dayjs.isDayjs(val)) {
           apiValues[key] = val.format('YYYY-MM-DD');
         } else {
           apiValues[key] = val;
