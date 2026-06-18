@@ -1,0 +1,167 @@
+/* ============================================================
+   参考项目 jcgs0527 CSS — 覆盖 Ant Design 默认样式
+   来源: /tmp/jcgs0527_extracted/jcgs0527非常好的功能完善情况/styles.css
+   ============================================================ */
+
+:root {
+  --jc-bg: #f6f8f7;
+  --jc-panel: #ffffff;
+  --jc-text: #17201d;
+  --jc-muted: #66736f;
+  --jc-line: #dbe5e1;
+  --jc-accent: #147f64;
+  --jc-accent-strong: #0d5f4b;
+  --jc-accent-soft: #e4f4ef;
+  --jc-warn: #b45309;
+  --jc-danger: #c2413a;
+  --jc-info: #256b85;
+  --jc-shadow: 0 12px 30px rgba(24, 43, 38, 0.08);
+  --jc-radius: 8px;
+}
+
+/* 全局背景 */
+body {
+  background: var(--jc-bg) !important;
+  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif !important;
+  font-size: 14px !important;
+}
+
+/* ---- Ant Design 组件覆写 ---- */
+
+/* Card */
+.ant-card {
+  border: 1px solid var(--jc-line) !important;
+  border-radius: var(--jc-radius) !important;
+  box-shadow: var(--jc-shadow) !important;
+}
+
+/* Table */
+.ant-table {
+  border: 1px solid var(--jc-line) !important;
+  border-radius: var(--jc-radius) !important;
+}
+.ant-table-thead > tr > th {
+  background: #f2f7f5 !important;
+  color: #40514c !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  border-bottom: 1px solid var(--jc-line) !important;
+}
+.ant-table-tbody > tr:hover > td {
+  background: #f7fbf9 !important;
+}
+.ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--jc-line) !important;
+}
+
+/* Button */
+.ant-btn-primary {
+  border-color: var(--jc-accent) !important;
+  background: var(--jc-accent) !important;
+}
+.ant-btn-primary:hover {
+  background: var(--jc-accent-strong) !important;
+}
+
+/* Tag / Pills */
+.ant-tag {
+  border-radius: 999px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  line-height: 18px !important;
+  border: 0 !important;
+}
+.ant-tag-green {
+  background: #ecfdf5 !important;
+  color: #047857 !important;
+}
+.ant-tag-orange {
+  background: #fff7ed !important;
+  color: var(--jc-warn) !important;
+}
+.ant-tag-red {
+  background: #fff1f2 !important;
+  color: var(--jc-danger) !important;
+}
+.ant-tag-blue {
+  background: #eef8fb !important;
+  color: var(--jc-info) !important;
+}
+
+/* Input */
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-input-number,
+.ant-picker,
+.ant-select-selector {
+  border-radius: var(--jc-radius) !important;
+  border-color: var(--jc-line) !important;
+  min-height: 36px !important;
+}
+.ant-input:hover,
+.ant-input-affix-wrapper:hover,
+.ant-input-number:hover,
+.ant-picker:hover,
+.ant-select-selector:hover {
+  border-color: #a9bbb5 !important;
+}
+
+/* Modal */
+.ant-modal-content {
+  border-radius: var(--jc-radius) !important;
+  border: 1px solid var(--jc-line) !important;
+  box-shadow: var(--jc-shadow) !important;
+}
+.ant-modal-header {
+  border-bottom: 1px solid var(--jc-line) !important;
+  padding: 14px 16px !important;
+}
+.ant-modal-body {
+  padding: 16px !important;
+}
+.ant-modal-footer {
+  border-top: 1px solid var(--jc-line) !important;
+  padding: 14px 16px !important;
+}
+
+/* Drawer */
+.ant-drawer-content-wrapper {
+  border-radius: 0 !important;
+}
+.ant-drawer-header {
+  border-bottom: 1px solid var(--jc-line) !important;
+}
+
+/* Form */
+.ant-form-item {
+  margin-bottom: 12px !important;
+}
+.ant-form-item-label > label {
+  color: #40514c !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+/* Descriptions (Detail) */
+.ant-descriptions-bordered .ant-descriptions-item-label {
+  background: #f2f7f5 !important;
+  color: #40514c !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+/* Progress (dashboard bars) */
+.ant-progress-bg {
+  background: var(--jc-accent) !important;
+}
+
+/* Statistic (dashboard metrics) */
+.ant-statistic-title {
+  color: var(--jc-muted) !important;
+  font-size: 12px !important;
+}
+.ant-statistic-content {
+  font-size: 24px !important;
+  color: var(--jc-text) !important;
+}

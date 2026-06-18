@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+*.egg
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Database
+*.db-shm
+*.db-wal
+
+# Environment
+.env
+.env.local
+
+# Database files
+backend/data/
+*.db
+*.db-shm
+*.db-wal
+
+# Temp notes
+jcgs0527非常好的功能完善情况/
