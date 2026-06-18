@@ -18,6 +18,8 @@ interface SearchableSelectProps {
   searchField?: string;
   /** 是否允许清除 */
   allowClear?: boolean;
+  /** 是否允许手动输入（默认 true，false 时只允许从列表选择） */
+  allowManual?: boolean;
   /** 表单 value */
   value?: any;
   /** 值变化回调 */
@@ -34,6 +36,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
   extraLabelKey,
   searchField,
   allowClear = true,
+  allowManual = true,
   value,
   onChange,
   mode,
@@ -102,6 +105,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
   // 如果 value 是字符串且不在选项列表中，自动切换到手动模式
   useEffect(() => {
+    if (!allowManual) return;
     if (value && typeof value === 'string' && options.length > 0) {
       const found = options.some(o => String(o[valueKey]) === String(value));
       if (!found) {
@@ -109,10 +113,10 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
         setManualText(value);
       }
     }
-  }, [value, options, valueKey]);
+  }, [value, options, valueKey, allowManual]);
 
   // 手动输入模式
-  if (isManual) {
+  if (isManual && allowManual) {
     return (
       <Input
         value={manualText}
@@ -157,17 +161,21 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
       dropdownRender={(menu) => (
         <>
           {menu}
-          <Divider style={{ margin: '4px 0' }} />
-          <div style={{ padding: '4px 8px' }}>
-            <Button
-              type="link"
-              icon={<EditOutlined />}
-              onClick={switchToManual}
-              size="small"
-            >
-              手动输入自定义值
-            </Button>
-          </div>
+          {allowManual && (
+            <>
+              <Divider style={{ margin: '4px 0' }} />
+              <div style={{ padding: '4px 8px' }}>
+                <Button
+                  type="link"
+                  icon={<EditOutlined />}
+                  onClick={switchToManual}
+                  size="small"
+                >
+                  手动输入自定义值
+                </Button>
+              </div>
+            </>
+          )}
         </>
       )}
     >

@@ -119,7 +119,7 @@ const FinanceList: React.FC = () => {
         <DatePicker style={{ width: '100%' }} />
       </Form.Item>
       <Form.Item name="contract_id" label="合同">
-        <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" allowClear />
+        <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="category" label="款项类别">
         <Select placeholder="请选择款项类别">
@@ -145,7 +145,7 @@ const FinanceList: React.FC = () => {
         <InputNumber style={{ width: '100%' }} prefix="¥" />
       </Form.Item>
       <Form.Item name="company_id" label="公司">
-        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear />
+        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="company_bank_account" label="银行账号">
         <Input placeholder="请输入银行账号" />
@@ -160,9 +160,7 @@ const FinanceList: React.FC = () => {
         <Input placeholder="请输入发票号" />
       </Form.Item>
       <Form.Item name="department_id" label="部门">
-        <Select placeholder="请选择部门">
-          {departments.map(d => <Select.Option key={d.id} value={d.id}>{d.name}</Select.Option>)}
-        </Select>
+        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear allowManual={false} />
       </Form.Item>
     </>
   );

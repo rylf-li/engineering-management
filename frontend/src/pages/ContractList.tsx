@@ -131,16 +131,16 @@ const ContractList: React.FC = () => {
         <Input.TextArea rows={3} placeholder="请输入服务内容" />
       </Form.Item>
       <Form.Item name="customer_id" label="客户">
-        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" />
+        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" allowManual={false} />
       </Form.Item>
       <Form.Item name="project_id" label="项目">
-        <SearchableSelect endpoint="/projects/" placeholder="请选择项目" extraLabelKey="project_no" allowClear />
+        <SearchableSelect endpoint="/projects/" placeholder="请选择项目" extraLabelKey="project_no" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="department_id" label="部门">
-        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear />
+        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="company_id" label="公司">
-        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear />
+        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="owner_name" label="负责人">
         <SearchableSelect endpoint="/employees/" placeholder="请选择负责人" labelKey="name" valueKey="name" allowClear />

@@ -120,7 +120,7 @@ const formFields = (
       </Select>
     </Form.Item>
     <Form.Item name="department_id" label="所属部门">
-      <SearchableSelect endpoint="/departments/" placeholder="请选择部门（可选）" allowClear />
+      <SearchableSelect endpoint="/departments/" placeholder="请选择部门（可选）" allowClear allowManual={false} />
     </Form.Item>
   </>
 );

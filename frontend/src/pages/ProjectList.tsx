@@ -171,13 +171,13 @@ const ProjectList: React.FC = () => {
         </Select>
       </Form.Item>
       <Form.Item name="customer_id" label="客户">
-        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" allowClear />
+        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="department_id" label="部门">
-        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear />
+        <SearchableSelect endpoint="/departments/" placeholder="请选择部门" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="company_id" label="公司">
-        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear />
+        <SearchableSelect endpoint="/companies/" placeholder="请选择公司" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="owner_name" label="负责人">
         <SearchableSelect endpoint="/employees/" placeholder="请选择负责人" labelKey="name" valueKey="name" allowClear />
@@ -207,10 +207,10 @@ const ProjectList: React.FC = () => {
         </Select>
       </Form.Item>
       <Form.Item name="contract_id" label="合同">
-        <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" allowClear />
+        <SearchableSelect endpoint="/contracts/" placeholder="请选择合同" extraLabelKey="contract_no" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="customer_id" label="客户">
-        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" allowClear />
+        <SearchableSelect endpoint="/customers/" placeholder="请选择客户" allowClear allowManual={false} />
       </Form.Item>
       <Form.Item name="biz_category" label="业务类别">
         <Select placeholder="请选择业务类别">
