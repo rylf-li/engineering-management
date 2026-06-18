@@ -122,7 +122,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if not db_obj:
             raise HTTPException(status_code=404, detail=f"记录不存在 (id={id})")
         for field, value in obj_data.items():
-            if value is not None and hasattr(db_obj, field):
+            if hasattr(db_obj, field):
                 if value == 0 and field.endswith("_id"):
                     value = None
                 setattr(db_obj, field, value)

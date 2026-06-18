@@ -562,8 +562,13 @@ async def create_request_payment(
     _current_user=Depends(get_current_user),
 ):
     """创建请款汇总，自动标记相关订单为已请款"""
+    # 验证外键引用存在
+    create_data = obj_in.model_dump()
+    if create_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == create_data["contract_id"]).first():
+            create_data["contract_id"] = None
     # 创建汇总
-    summary = request_summary_crud.create(db, obj_in=obj_in)
+    summary = request_summary_crud.create_with_dict(db, obj_data=create_data)
 
     # 创建明细：如果传入了 detail_order_ids
     if obj_in.detail_order_ids:
@@ -617,7 +622,11 @@ async def update_request_payment(
     _current_user=Depends(get_current_user),
 ):
     """更新请款汇总"""
-    summary = request_summary_crud.update(db, id=summary_id, obj_in=obj_in)
+    update_data = obj_in.model_dump(exclude_unset=True)
+    if update_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == update_data["contract_id"]).first():
+            update_data["contract_id"] = None
+    summary = request_summary_crud.update_with_dict(db, id=summary_id, obj_data=update_data)
     if summary.contract_id:
         _recalc_contract_financials(db, summary.contract_id)
     sync_all(db)
@@ -732,8 +741,13 @@ async def create_collection(
     _current_user=Depends(get_current_user),
 ):
     """创建收款汇总，自动标记相关订单为已收款"""
+    # 验证外键引用存在
+    create_data = obj_in.model_dump()
+    if create_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == create_data["contract_id"]).first():
+            create_data["contract_id"] = None
     # 创建汇总
-    summary = collection_summary_crud.create(db, obj_in=obj_in)
+    summary = collection_summary_crud.create_with_dict(db, obj_data=create_data)
 
     # 创建明细
     if obj_in.detail_order_ids:
@@ -788,7 +802,11 @@ async def update_collection(
     _current_user=Depends(get_current_user),
 ):
     """更新收款汇总"""
-    summary = collection_summary_crud.update(db, id=summary_id, obj_in=obj_in)
+    update_data = obj_in.model_dump(exclude_unset=True)
+    if update_data.get("contract_id"):
+        if not db.query(Contract).filter(Contract.id == update_data["contract_id"]).first():
+            update_data["contract_id"] = None
+    summary = collection_summary_crud.update_with_dict(db, id=summary_id, obj_data=update_data)
     if summary.contract_id:
         _recalc_contract_financials(db, summary.contract_id)
     sync_all(db)
