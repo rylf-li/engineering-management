@@ -119,11 +119,11 @@ const ContractList: React.FC = () => {
 
   useEffect(() => {
     Promise.all([
-      api.get('/customers/', { params: { page_size: 100 } }).then(r => setCustomers(r.items ?? [])).catch(() => {}),
-      api.get('/projects/', { params: { page_size: 100 } }).then(r => setProjects(r.items ?? [])).catch(() => {}),
-      api.get('/departments/', { params: { page_size: 100 } }).then(r => setDepartments(r.items ?? [])).catch(() => {}),
-      api.get('/companies/', { params: { page_size: 100 } }).then(r => setCompanies(r.items ?? [])).catch(() => {}),
-      api.get('/employees/', { params: { page_size: 100 } }).then(r => setEmployees(r.items ?? [])).catch(() => {}),
+      api.get('/customers/', { params: { all: true } }).then(r => setCustomers(r.items ?? [])).catch(() => {}),
+      api.get('/projects/', { params: { all: true } }).then(r => setProjects(r.items ?? [])).catch(() => {}),
+      api.get('/departments/', { params: { all: true } }).then(r => setDepartments(r.items ?? [])).catch(() => {}),
+      api.get('/companies/', { params: { all: true } }).then(r => setCompanies(r.items ?? [])).catch(() => {}),
+      api.get('/employees/', { params: { all: true } }).then(r => setEmployees(r.items ?? [])).catch(() => {}),
     ]);
   }, []);
 

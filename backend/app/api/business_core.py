@@ -158,10 +158,14 @@ def list_projects(
     sort_order: str = Query("asc"),
     search: Optional[str] = Query(None),
     status: Optional[str] = Query(None),
+    all: bool = Query(False, description="返回全部记录（用于下拉选择）"),
     db: Session = Depends(get_db),
     current_user: Dict[str, Any] = Depends(get_current_user),
 ):
     """项目列表（分页 + 筛选）"""
+    if all:
+        page = 1
+        page_size = 99999
     filters = {}
     if status:
         filters["status"] = status
@@ -365,10 +369,14 @@ def list_contracts(
     customer_id: Optional[int] = Query(None),
     department_id: Optional[int] = Query(None),
     company_id: Optional[int] = Query(None),
+    all: bool = Query(False, description="返回全部记录（用于下拉选择）"),
     db: Session = Depends(get_db),
     current_user: Dict[str, Any] = Depends(get_current_user),
 ):
     """合同列表（含计算财务字段：应收、请款、已收、未请款、利润）"""
+    if all:
+        page = 1
+        page_size = 99999
     filters: Dict[str, Any] = {}
     if status:
         filters["status"] = status

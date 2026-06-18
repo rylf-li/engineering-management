@@ -25,7 +25,7 @@ const roleColors: Record<string, string> = {
 const DepartmentSelect: React.FC = () => {
   const [depts, setDepts] = React.useState<any[]>([]);
   React.useEffect(() => {
-    api.get('/departments/?page=1&page_size=100').then((res: any) => {
+    api.get('/departments/?all=true').then((res: any) => {
       const items = res?.items ?? res?.data?.items ?? [];
       setDepts(items);
     }).catch(() => {});

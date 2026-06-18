@@ -216,9 +216,13 @@ def list_employees(
     phone: Optional[str] = None,
     department_id: Optional[int] = None,
     is_active: Optional[bool] = None,
+    all: bool = Query(False, description="返回全部记录（用于下拉选择）"),
     db: Session = Depends(get_db),
     _current_user=Depends(get_current_user),
 ):
+    if all:
+        page = 1
+        page_size = 99999
     params = _build_filters(
         page=page, page_size=page_size,
         sort_field=sort_field, sort_order=sort_order,
@@ -478,9 +482,13 @@ def list_departments(
     sort_order: str = Query("asc"),
     search: Optional[str] = None,
     name: Optional[str] = None,
+    all: bool = Query(False, description="返回全部记录（用于下拉选择）"),
     db: Session = Depends(get_db),
     _current_user=Depends(get_current_user),
 ):
+    if all:
+        page = 1
+        page_size = 99999
     params = _build_filters(
         page=page, page_size=page_size,
         sort_field=sort_field, sort_order=sort_order,
@@ -638,9 +646,13 @@ def list_companies(
     search: Optional[str] = None,
     name: Optional[str] = None,
     tax_number: Optional[str] = None,
+    all: bool = Query(False, description="返回全部记录（用于下拉选择）"),
     db: Session = Depends(get_db),
     _current_user=Depends(get_current_user),
 ):
+    if all:
+        page = 1
+        page_size = 99999
     params = _build_filters(
         page=page, page_size=page_size,
         sort_field=sort_field, sort_order=sort_order,
@@ -931,9 +943,13 @@ def list_customers(
     search: Optional[str] = None,
     name: Optional[str] = None,
     contact_person: Optional[str] = None,
+    all: bool = Query(False, description="返回全部记录（用于下拉选择）"),
     db: Session = Depends(get_db),
     _current_user=Depends(get_current_user),
 ):
+    if all:
+        page = 1
+        page_size = 99999
     params = _build_filters(
         page=page, page_size=page_size,
         sort_field=sort_field, sort_order=sort_order,
