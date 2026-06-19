@@ -58,10 +58,10 @@ const formFields = (
     <Form.Item name="parameters" label="业务参数">
       <Input placeholder="请输入业务参数" />
     </Form.Item>
-    <Form.Item name="unit_price" label="业务单价" rules={[{ required: true, message: '请输入业务单价' }]}>
+    <Form.Item name="unit_price" label="业务单价">
       <InputNumber style={{ width: '100%' }} prefix="¥" />
     </Form.Item>
-    <Form.Item name="unit" label="业务单位">
+    <Form.Item name="unit" label="业务单位" rules={[{ required: true, message: '请输入业务单位' }]}>
       <Input placeholder="请输入业务单位" />
     </Form.Item>
     <Form.Item name="settlement_fee" label="业务结算费(%)">
