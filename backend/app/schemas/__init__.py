@@ -304,7 +304,7 @@ class BizServiceBase(BaseModel):
     item_name: str = Field(..., max_length=200)
     parameters: Optional[str] = None
     unit_price: Optional[Decimal] = Decimal(0)
-    unit: str = Field(..., max_length=50)
+    unit: Optional[str] = None
     settlement_fee: Optional[Decimal] = Decimal(0)
     performance_fee: Optional[Decimal] = Decimal(0)
 

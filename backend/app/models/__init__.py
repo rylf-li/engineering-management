@@ -363,7 +363,7 @@ class BusinessService(Base, TimestampMixin, SortableMixin):
     item_name = Column(String(200), nullable=False, comment="业务项目")
     parameters = Column(String(500), nullable=True, comment="业务参数")
     unit_price = Column(Numeric(12, 2), default=0, comment="业务单价")
-    unit = Column(String(50), nullable=False, comment="业务单位")
+    unit = Column(String(50), nullable=True, comment="业务单位")
     settlement_fee = Column(Numeric(12, 2), default=0, comment="业务结算费")
     performance_fee = Column(Numeric(12, 2), default=0, comment="业务绩效费")
 
