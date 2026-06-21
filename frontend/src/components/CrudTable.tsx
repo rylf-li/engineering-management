@@ -362,7 +362,7 @@ export const MiniCrudTable: React.FC<MiniCrudTableProps> = ({
       cancelText: '取消',
       onOk: async () => {
         try {
-          await api.post(`${endpoint}/batch-delete/`, { ids: selectedRowKeys });
+          await api.post(`${endpoint}/batch-delete`, { ids: selectedRowKeys });
           message.success('批量删除成功');
           setSelectedRowKeys([]);
           fetchData(pagination.current, pagination.pageSize);
@@ -381,7 +381,7 @@ export const MiniCrudTable: React.FC<MiniCrudTableProps> = ({
       cancelText: '取消',
       onOk: async () => {
         try {
-          await api.post(`${endpoint}/batch-status/`, {
+          await api.post(`${endpoint}/batch-status`, {
             ids: selectedRowKeys,
             field: statusField,
             value,
@@ -838,7 +838,7 @@ const CrudTable: React.FC<CrudTableProps> = ({
       cancelText: '取消',
       onOk: async () => {
         try {
-          await api.post(`${apiEndpoint}batch-delete/`, { ids: selectedRowKeys });
+          await api.post(`${apiEndpoint}batch-delete`, { ids: selectedRowKeys });
           message.success('批量删除成功');
           setSelectedRowKeys([]);
           fetchData(pagination.current, pagination.pageSize);
@@ -858,7 +858,7 @@ const CrudTable: React.FC<CrudTableProps> = ({
       cancelText: '取消',
       onOk: async () => {
         try {
-          await api.post(`${apiEndpoint}batch-status/`, {
+          await api.post(`${apiEndpoint}batch-status`, {
             ids: selectedRowKeys,
             field: statusField,
             value,

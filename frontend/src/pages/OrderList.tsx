@@ -95,7 +95,7 @@ const OrderList: React.FC = () => {
       const values = await form.validateFields();
       setLoading(true);
       if (batchModal.type === 'request') {
-        await api.post('/orders/batch-request/', {
+        await api.post('/orders/batch-request', {
           order_ids: batchModal.selectedRowKeys,
           batch_no: values.batch_no,
           request_date: values.request_date?.format?.('YYYY-MM-DD') || values.request_date,
@@ -103,7 +103,7 @@ const OrderList: React.FC = () => {
         });
         message.success('批量请款成功');
       } else {
-        await api.post('/orders/batch-collect/', {
+        await api.post('/orders/batch-collect', {
           order_ids: batchModal.selectedRowKeys,
           batch_no: values.batch_no,
           collection_date: values.collection_date?.format?.('YYYY-MM-DD') || values.collection_date,
