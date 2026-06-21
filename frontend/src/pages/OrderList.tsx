@@ -24,6 +24,7 @@ const columns = [
   { title: '工程名称', dataIndex: 'project_name', key: 'project_name' },
   { title: '客户名称', dataIndex: 'customer_name', key: 'customer_name' },
   { title: '业务类别', dataIndex: 'biz_category', key: 'biz_category' },
+  { title: '业务项目', dataIndex: 'biz_item_name', key: 'biz_item_name' },
   { title: '单位', dataIndex: 'biz_unit', key: 'biz_unit' },
   { title: '数量', dataIndex: 'biz_quantity', key: 'biz_quantity' },
   { title: '单价¥', dataIndex: 'biz_unit_price', key: 'biz_unit_price', render: fmt },
@@ -163,6 +164,9 @@ const OrderList: React.FC = () => {
           <Select.Option value="测绘">测绘</Select.Option>
           <Select.Option value="勘察">勘察</Select.Option>
         </Select>
+      </Form.Item>
+      <Form.Item name="biz_item_name" label="业务项目">
+        <SearchableSelect endpoint="/business-services/" placeholder="请选择业务项目" labelKey="item_name" valueKey="item_name" allowClear />
       </Form.Item>
       <Form.Item name="biz_parameters" label="业务参数">
         <Input placeholder="请输入业务参数" />

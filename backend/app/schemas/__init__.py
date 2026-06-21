@@ -336,6 +336,7 @@ class OrderBase(BaseModel):
     customer_name: Optional[str] = None
     customer_id: Optional[int] = None
     biz_category: Optional[str] = None
+    biz_item_name: Optional[str] = None
     biz_parameters: Optional[str] = None
     biz_unit: Optional[str] = None
     biz_quantity: Optional[Decimal] = Decimal(0)

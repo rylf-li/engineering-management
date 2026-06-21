@@ -404,6 +404,7 @@ class Order(Base, TimestampMixin, SortableMixin):
 
     # 业务参数
     biz_category = Column(String(100), nullable=True, comment="业务类别")
+    biz_item_name = Column(String(200), nullable=True, comment="业务项目")
     biz_parameters = Column(String(500), nullable=True, comment="业务参数")
     biz_unit = Column(String(50), nullable=True, comment="业务单位")
     biz_quantity = Column(Numeric(12, 2), default=0, comment="业务数量")

@@ -628,10 +628,14 @@ def list_services(
     sort_order: str = Query("asc"),
     search: Optional[str] = Query(None),
     category: Optional[str] = Query(None),
+    all: bool = Query(False, description="返回全部记录（用于下拉选择）"),
     db: Session = Depends(get_db),
     current_user: Dict[str, Any] = Depends(get_current_user),
 ):
     """业务服务列表（分页 + 筛选）"""
+    if all:
+        page = 1
+        page_size = 99999
     filters: Dict[str, Any] = {}
     if category:
         filters["category"] = category
