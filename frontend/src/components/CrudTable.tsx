@@ -651,7 +651,7 @@ export const MiniCrudTable: React.FC<MiniCrudTableProps> = ({
           setModalVisible(false);
           form.resetFields();
         }}
-        destroyOnClose
+        destroyOnHidden
         width={640}
       >
         {modalVisible && <Form form={form} layout="vertical">
@@ -1346,7 +1346,7 @@ const CrudTable: React.FC<CrudTableProps> = ({
           setModalVisible(false);
           form.resetFields();
         }}
-        destroyOnClose
+        destroyOnHidden
         width={640}
       >
         {modalVisible && <Form form={form} layout="vertical">

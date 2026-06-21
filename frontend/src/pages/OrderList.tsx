@@ -239,10 +239,10 @@ const OrderList: React.FC = () => {
         onOk={handleBatchOk}
         confirmLoading={loading}
         onCancel={() => { setBatchModal((prev) => ({ ...prev, visible: false })); form.resetFields(); }}
-        destroyOnClose
+        destroyOnHidden
         width={480}
       >
-        <Form form={form} layout="vertical">
+        {batchModal.visible && <Form form={form} layout="vertical">
           {batchModal.type === 'request' ? (
             <>
               <Form.Item name="batch_no" label="批量请款编号" rules={[{ required: true, message: '请输入批量请款编号' }]}>
@@ -274,7 +274,7 @@ const OrderList: React.FC = () => {
               </Form.Item>
             </>
           )}
-        </Form>
+        </Form>}
       </Modal>
     </>
   );

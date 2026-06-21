@@ -79,7 +79,7 @@ const FinanceList: React.FC = () => {
 
   const fetchSummary = useCallback(async () => {
     try {
-      const res = await api.get('/finances/', { params: { page_size: 10000 } });
+      const res = await api.get('/finances/', { params: { all: true } });
       const items = res.items ?? res.results ?? [];
       const income = items.filter((r: any) => r.income_expense_type === '收入').reduce((s: number, r: any) => s + (r.amount || 0), 0);
       const expense = items.filter((r: any) => r.income_expense_type === '支出').reduce((s: number, r: any) => s + (r.amount || 0), 0);

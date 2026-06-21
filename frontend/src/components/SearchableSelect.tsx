@@ -154,7 +154,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
       searchValue={searchText}
       filterOption={false}
       style={{ width: '100%' }}
-      dropdownRender={(menu) => (
+      popupRender={(menu) => (
         <>
           {menu}
           {allowManual && (

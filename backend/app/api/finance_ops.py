@@ -870,10 +870,14 @@ async def list_finances(
     category: Optional[str] = None,
     contract_id: Optional[int] = None,
     status: Optional[str] = Query(None, description="入账状态(未入账/已入账)"),
+    all: bool = Query(False, description="返回全部记录（用于下拉选择）"),
     db: Session = Depends(get_db),
     _current_user=Depends(get_current_user),
 ):
     """获取财务列表（支持收支类别筛选）"""
+    if all:
+        page = 1
+        page_size = 99999
     filters: Dict[str, Any] = {}
     if income_expense_type:
         filters["income_expense_type"] = income_expense_type
@@ -1079,7 +1083,7 @@ async def reorder_collections(
     return {"message": "排序更新成功", "data": {"updated": len(data.ids)}}
 
 
-@router_finances.get("/{finance_id}/contract", response_model=Dict[str, Any])
+@router_finances.get("/{finance_id}/contract")
 async def get_finance_contract(
     finance_id: int,
     page: int = Query(1, ge=1),
