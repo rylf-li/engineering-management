@@ -651,12 +651,11 @@ export const MiniCrudTable: React.FC<MiniCrudTableProps> = ({
           setModalVisible(false);
           form.resetFields();
         }}
-        destroyOnHidden
         width={640}
       >
-        {modalVisible && <Form form={form} layout="vertical">
+        <Form form={form} layout="vertical">
           {renderFormItems()}
-        </Form>}
+        </Form>
       </Modal>
 
       {/* Detail Drawer — combines record info + sub-tables */}
@@ -1346,12 +1345,11 @@ const CrudTable: React.FC<CrudTableProps> = ({
           setModalVisible(false);
           form.resetFields();
         }}
-        destroyOnHidden
         width={640}
       >
-        {modalVisible && <Form form={form} layout="vertical">
+        <Form form={form} layout="vertical">
           {renderFormItems()}
-        </Form>}
+        </Form>
       </Modal>
 
       {/* Detail Drawer — combines record info + sub-tables */}

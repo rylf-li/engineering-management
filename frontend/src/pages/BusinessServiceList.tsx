@@ -15,10 +15,6 @@ const columns: any[] = [
   },
   { title: '业务项目', dataIndex: 'item_name', key: 'item_name' },
   { title: '业务参数', dataIndex: 'parameters', key: 'parameters' },
-  {
-    title: '业务单价', dataIndex: 'unit_price', key: 'unit_price',
-    render: (v: number | string) => `¥${(Number(v) || 0).toFixed(2)}`,
-  },
   { title: '业务单位', dataIndex: 'unit', key: 'unit' },
   {
     title: '业务结算费', dataIndex: 'settlement_fee', key: 'settlement_fee',
@@ -57,9 +53,6 @@ const formFields = (
     </Form.Item>
     <Form.Item name="parameters" label="业务参数">
       <Input placeholder="请输入业务参数" />
-    </Form.Item>
-    <Form.Item name="unit_price" label="业务单价">
-      <InputNumber style={{ width: '100%' }} prefix="¥" />
     </Form.Item>
     <Form.Item name="unit" label="业务单位">
       <Input placeholder="请输入业务单位" />
